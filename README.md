@@ -33,6 +33,25 @@ The OSINT skill operates in three primary modes—**Self-audit**, **Monitoring**
 * **Remediation and Monitoring:** Provides actionable guidance for data removal, breach response, and continuous presence monitoring to protect privacy over time.
 * **Embedded Ethics and Legal Boundaries:** Ethics are deeply embedded into the skill's core posture. It explicitly refuses social engineering, unauthorized access, handling of raw breach dumps, and unnecessary collection of sensitive data. It heavily emphasizes necessity, proportionality, and the reduction of privacy harm.
 
+## How to Use
+
+The OSINT skill is designed to be highly versatile and can be executed within both agentic environments and web chat interfaces.
+
+### Agentic Settings (CLI & Workspaces)
+This skill functions best in environments where the AI agent has direct tool access (e.g., file system reading/writing, web search, URL fetching). Supported agents include **Claude Code, Antigravity, Codex, Hermes, OpenClaw**, and similar tools.
+
+1. **Clone the repository:** Clone this directory into your local workspace.
+2. **Invoke the agent:** Point your agent to the `SKILL.md` file.
+   * *Example prompt:* "Read the `SKILL.md` file in this directory and help me conduct a privacy self-audit."
+3. **Agent Workflow:** The agent will autonomously read the core instructions, templates, and module references. It will then initiate the structured intake process and build a collection plan for you to approve.
+
+### Web Chat Environments
+If you are using a standard web interface without direct file system access (e.g., **Claude Web, ChatGPT, Gemini**), you can still leverage the OSINT workflow:
+
+1. **Use the Web Prompt:** Open the `WEB_CHAT_PROMPT.md` file located in this repository.
+2. **Copy and Paste:** Copy the contents of that file and paste it into your web chat interface.
+3. **Interactive Guidance:** The prompt injects the core guidelines into the AI's context. The AI will act as your offline OSINT guide—managing your intake, generating specific search queries (dorks) for you to run manually, and analyzing the source text or HTML you paste back into the chat.
+
 ## License
 
 This project is licensed under the [Apache License 2.0](LICENSE).
