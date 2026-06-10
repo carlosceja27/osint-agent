@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<!--
+  OSINT Self-Audit Report Template (v4.2 — interface-design pass)
+  Agent instructions:
+  - Replace every {PLACEHOLDER}. Duplicate blocks marked "repeat". Delete unused sections/rows.
+  - Keep this file self-contained: NO external fonts, scripts, images, or stylesheets —
+    the report contains personal data and must not phone home when opened.
+  - Save the filled report ONLY to a user-confirmed private location
+    (default ~/osint-monitoring/{subject-slug}/reports/), never the skill directory.
+  - Section order mirrors the self-audit skeleton in templates.md. For journalism reports,
+    swap sections 4-9 for the journalism skeleton but keep header/evidence/footer patterns.
+  - Risk badge classes: H / M / L. Callout classes: ca (alert) cw (warn) cn (note) ck (ok).
+  - Callout icons: ca uses ⚠️ (warning triangle), cw uses ❯ (heavy exclamation mark), ck uses ✅ (check mark).
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>OSINT Self-Audit Report — {SUBJECT} | {DATE}</title>
+<style>
+:root{--bg:#0b0f1a;--card:#111827;--card2:#1a2236;--accent:#38bdf8;--green:#34d399;--red:#f87171;--yellow:#fbbf24;--text:#e2e8f0;--muted:#94a3b8;--border:rgba(255,255,255,0.07);--r:14px;--shadow:0 4px 32px rgba(11,15,26,.45)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+@media (prefers-reduced-motion: no-preference){html{scroll-behavior:smooth}}
+body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-size:16px;line-height:1.7}
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px 64px}
+.hdr{background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 60%,#0f172a 100%);border-bottom:1px solid var(--border);padding:48px 24px 48px;text-align:center;position:relative;overflow:hidden}
+.hdr::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(56,189,248,.12) 0%,transparent 70%);pointer-events:none}
+.badge{display:inline-block;background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.35);color:var(--accent);font-size:12px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:4px 16px;border-radius:999px;margin-bottom:24px}
+.hdr h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;letter-spacing:-.02em;background:linear-gradient(135deg,#e2e8f0 0%,#38bdf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;text-wrap:balance}
+.sub{color:var(--muted);font-size:14px;display:flex;justify-content:center;flex-wrap:wrap;gap:24px;margin-top:16px}
+.toc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px 32px;margin:48px 0 48px;box-shadow:var(--shadow)}
+.toc h2{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px}
+.toc ol{counter-reset:toc;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px 24px}
+.toc li{counter-increment:toc}
+.toc a{color:var(--muted);text-decoration:none;font-size:14px;display:flex;align-items:center;gap:8px;padding:4px 0;transition:color .2s}
+.toc a::before{content:counter(toc,decimal-leading-zero);font-size:12px;color:var(--accent);font-weight:700;min-width:24px}
+.toc a:hover{color:var(--text)}
+section{margin-bottom:48px;scroll-margin-top:24px}
+.sh{display:flex;align-items:center;gap:16px;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.sn{background:linear-gradient(135deg,#38bdf8,#7dd3fc);color:#0b0f1a;font-size:12px;font-weight:800;width:24px;height:24px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sh h2{font-size:20px;font-weight:700;text-wrap:balance}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px 32px;margin-bottom:16px;box-shadow:var(--shadow)}
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.risk{display:inline-flex;align-items:center;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 12px;border-radius:6px}
+.H{background:rgba(248,113,113,.15);color:var(--red);border:1px solid rgba(248,113,113,.3)}
+.M{background:rgba(251,191,36,.12);color:var(--yellow);border:1px solid rgba(251,191,36,.3)}
+.L{background:rgba(52,211,153,.10);color:var(--green);border:1px solid rgba(52,211,153,.3)}
+.conf{display:inline-block;font-size:12px;font-weight:600;padding:4px 8px;border-radius:4px;background:rgba(148,163,184,.12);color:var(--muted);border:1px solid rgba(148,163,184,.25);margin-left:8px}
+.f{display:flex;flex-direction:column;gap:8px;padding:16px 24px;background:var(--card2);border:1px solid var(--border);border-radius:10px;margin-bottom:12px}
+.ft{font-weight:700;font-size:16px;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.fm{font-size:14px;color:var(--muted)}
+.fm a{color:var(--accent);text-decoration:none}
+.fd{font-size:14px;margin-top:4px}
+.tw{overflow-x:auto;border-radius:10px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+thead{background:rgba(56,189,248,.08)}
+th{padding:12px 16px;text-align:left;font-weight:700;color:var(--accent);font-size:12px;letter-spacing:.07em;text-transform:uppercase;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:12px 16px;border-bottom:1px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(148,163,184,.04)}
+td a{color:var(--accent);text-decoration:none}
+.co{display:flex;gap:16px;padding:16px 24px;border-radius:10px;margin-bottom:16px;font-size:14px}
+.ci{font-size:20px;flex-shrink:0;line-height:1.5}
+.cw{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);color:#fde68a}
+.cn{background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);color:#bae6fd}
+.ck{background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);color:#a7f3d0}
+.ca{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);color:#fca5a5}
+.rs{display:flex;gap:16px;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(--border)}
+.rs:last-child{border-bottom:none}
+.rn{background:linear-gradient(135deg,#38bdf8,#7dd3fc);color:#0b0f1a;font-size:12px;font-weight:800;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:4px}
+.rb strong{color:var(--text);display:block;margin-bottom:4px}
+.rb p{color:var(--muted);font-size:14px}
+.rb a{color:var(--accent);text-decoration:none}
+.mg{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;margin-bottom:24px}
+.mt{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:16px 24px;text-align:center}
+.mv{font-size:30px;font-weight:800;background:linear-gradient(135deg,#38bdf8,#7dd3fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.ml{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:4px}
+footer{border-top:1px solid var(--border);padding:32px 24px;text-align:center;color:var(--muted);font-size:14px;background:var(--card)}
+footer strong{color:var(--accent)}
+ul{padding-left:24px}
+ul li{margin-bottom:8px;color:var(--muted);font-size:14px}
+ul li strong{color:var(--text)}
+p{color:var(--muted);font-size:14px;margin-bottom:16px;text-wrap:pretty}
+code{background:rgba(56,189,248,.1);color:var(--accent);padding:0 4px;border-radius:4px;font-size:12px;font-family:ui-monospace,'SF Mono',Menlo,monospace}
+a{color:var(--accent);text-decoration:underline;text-underline-offset:2px;text-decoration-color:rgba(56,189,248,.5)}
+a:hover{text-decoration-color:var(--accent)}
+nav a,.toc a{text-decoration:none}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+@media(max-width:600px){.hdr{padding:32px 16px 32px}.card{padding:16px}.toc ol{grid-template-columns:1fr}}
+@media print{:root{--bg:#f8fafc;--card:#f8fafc;--card2:#f1f5f9;--accent:#0369a1;--text:#1e293b;--muted:#475569;--border:#cbd5e1;--shadow:none;--red:#b91c1c;--yellow:#a16207;--green:#15803d}body{background:#f8fafc;color:#1e293b}.card,.f,.mt,.co,tr{break-inside:avoid}a{color:#0369a1}.card,.f,.mt,.toc{box-shadow:none}.hdr{background:#f8fafc}.hdr h1,.mv{background:none;-webkit-text-fill-color:#1e293b;-webkit-background-clip:initial;background-clip:initial;color:#1e293b}.sn,.rn{background:#e2e8f0;color:#1e293b}.badge{background:#f1f5f9;border-color:#cbd5e1;color:#475569}}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <span class="badge">Private — Contains Personal Data</span>
+  <h1>OSINT Self-Audit Report</h1>
+  <div class="sub"><span>Subject: {SUBJECT}</span><span>Date: {DATE}</span><span>Mode: {Self-audit | Monitoring run}</span><span>Environment: {agent with tools | web chat | offline}</span></div>
+</header>
+
+<div class="wrap">
+
+<nav class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#exec">Executive Summary</a></li>
+    <li><a href="#top">Top Risks &amp; Quick Wins</a></li>
+    <li><a href="#scope">Scope &amp; Sources Checked</a></li>
+    <li><a href="#findings">Findings by Category</a></li>
+    <li><a href="#evidence">Evidence Log</a></li>
+    <li><a href="#risk">Risk Summary</a></li>
+    <li><a href="#remediation">Remediation &amp; Opt-Out Steps</a></li>
+    <li><a href="#monitoring">Monitoring Plan</a></li>
+    <li><a href="#notfound">What Was Not Found</a></li>
+    <li><a href="#limits">Limitations &amp; Recheck Schedule</a></li>
+  </ol>
+</nav>
+
+<section id="exec">
+  <div class="sh"><span class="sn">01</span><h2>Executive Summary</h2></div>
+  <div class="mg">
+    <div class="mt"><div class="mv">{N}</div><div class="ml">Findings</div></div>
+    <div class="mt"><div class="mv">{N}</div><div class="ml">High Risk</div></div>
+    <div class="mt"><div class="mv">{N}</div><div class="ml">Medium Risk</div></div>
+    <div class="mt"><div class="mv">{N}</div><div class="ml">Low Risk</div></div>
+    <div class="mt"><div class="mv">{N}</div><div class="ml">Sources Checked</div></div>
+  </div>
+  <div class="card"><p>{2–4 sentence overview: overall exposure posture, the most consequential findings, and the single most important action. State facts and assessments separately.}</p></div>
+</section>
+
+<section id="top">
+  <div class="sh"><span class="sn">02</span><h2>Top Risks &amp; Quick Wins</h2></div>
+  <!-- repeat one callout per top item; classes: ca=alert (⚠️), cw=warn (❯), cn=note, ck=positive (✅) -->
+  <div class="co ca"><span class="ci">&#9888;&#65039;</span><div><strong>{High-priority finding}</strong> — {why it matters}. <em>Quick win: {first remediation step}.</em></div></div>
+  <div class="co cw"><span class="ci">&#10071;</span><div><strong>{Medium finding}</strong> — {why}. <em>Quick win: {step}.</em></div></div>
+  <div class="co ck"><span class="ci">&#10003;</span><div><strong>{Positive observation}</strong> — {e.g., a category with no exposure found}.</div></div>
+</section>
+
+<section id="scope">
+  <div class="sh"><span class="sn">03</span><h2>Scope &amp; Sources Checked</h2></div>
+  <div class="card">
+    <ul>
+      <li><strong>Identifiers in scope:</strong> {list — only what was approved}</li>
+      <li><strong>Sources allowed:</strong> {categories}</li>
+      <li><strong>Sources excluded:</strong> {categories}</li>
+      <li><strong>Modules run:</strong> {e.g., A, B, C, F, J, O} — deferred: {list, with reason}</li>
+      <li><strong>Standing scope / plan approved:</strong> {date and by whom}</li>
+    </ul>
+  </div>
+</section>
+
+<section id="findings">
+  <div class="sh"><span class="sn">04</span><h2>Findings by Category</h2></div>
+  <!-- repeat this card per category (identity/contact, social profiles, professional/code,
+       news/media, public records, data brokers, breach exposure, username enumeration) -->
+  <div class="card">
+    <h3 style="margin-bottom:16px">{Category} <span style="color:var(--muted);font-weight:400;font-size:12px">(Module {X})</span></h3>
+    <!-- repeat .f per finding -->
+    <div class="f">
+      <div class="ft">{F-001} · {Finding title} <span class="risk M">Medium</span><span class="conf">{Confirmed | Likely | Possible | Disputed}</span></div>
+      <div class="fm">Source: <a href="{URL}">{source name}</a> ({tier}) · Accessed {date} · Query: <code>{query}</code> · Archive: {archive URL or "not archived"}</div>
+      <div class="fd">{What it shows, identity-match reasoning, and why it matters. Facts first; assessment labeled as assessment.}</div>
+    </div>
+  </div>
+</section>
+
+<section id="evidence">
+  <div class="sh"><span class="sn">05</span><h2>Evidence Log</h2></div>
+  <div class="tw"><table>
+    <thead><tr><th>ID</th><th>EEI</th><th>Mod</th><th>Source</th><th>Tier</th><th>URL</th><th>Query/Path</th><th>What It Shows</th><th>Identity Match</th><th>Confidence</th><th>Accessed</th><th>Archive</th></tr></thead>
+    <tbody>
+      <!-- repeat per finding -->
+      <tr><td>{F-001}</td><td>{EEI-1}</td><td>{A}</td><td>{source}</td><td>{primary}</td><td><a href="{url}">link</a></td><td><code>{query}</code></td><td>{fact}</td><td>{criteria}</td><td>{label}</td><td>{date}</td><td>{link or —}</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="risk">
+  <div class="sh"><span class="sn">06</span><h2>Risk Summary</h2></div>
+  <div class="tw"><table>
+    <thead><tr><th>ID</th><th>Finding</th><th>Risk</th><th>Why It Matters</th><th>Remediation Ref</th></tr></thead>
+    <tbody>
+      <tr><td>{F-001}</td><td>{short title}</td><td><span class="risk H">High</span></td><td>{impact}</td><td>{step #}</td></tr>
+    </tbody>
+  </table></div>
+  <p style="margin-top:16px"><strong>Ratings:</strong> High = enables account takeover, stalking/doxxing, identity theft, or physical risk · Medium = sensitive associations or aggregated exposure · Low = ordinary public presence.</p>
+</section>
+
+<section id="remediation">
+  <div class="sh"><span class="sn">07</span><h2>Remediation &amp; Opt-Out Steps</h2></div>
+  <div class="card">
+    <!-- repeat .rs per step, ordered by priority; details in references/remediation.md -->
+    <div class="rs"><span class="rn">1</span><div class="rb"><strong>{Action}</strong><p>{How, where, expected timeline, and the recheck date. Log in the remediation tracker.}</p></div></div>
+    <div class="rs"><span class="rn">2</span><div class="rb"><strong>{Action}</strong><p>{...}</p></div></div>
+  </div>
+</section>
+
+<section id="monitoring">
+  <div class="sh"><span class="sn">08</span><h2>Monitoring Plan</h2></div>
+  <div class="tw"><table>
+    <thead><tr><th>Check</th><th>Tool / Method</th><th>Frequency</th><th>Trigger Action</th></tr></thead>
+    <tbody>
+      <tr><td>{e.g., broker recheck}</td><td>{method}</td><td>{4–6 wks, then quarterly}</td><td>{re-submit opt-out}</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="notfound">
+  <div class="sh"><span class="sn">09</span><h2>What Was Not Found</h2></div>
+  <div class="card"><ul>
+    <li>{Negative finding — source checked, no matching record. Not proof of absence.}</li>
+  </ul></div>
+</section>
+
+<section id="limits">
+  <div class="sh"><span class="sn">10</span><h2>Limitations &amp; Recheck Schedule</h2></div>
+  <div class="card"><ul>
+    <li>{Sources not checked and why — e.g., "blocked by anti-bot", "requires paid API key — user to check manually", "not in approved scope".}</li>
+    <li><strong>Next full recheck:</strong> {date}</li>
+  </ul></div>
+</section>
+
+</div>
+
+<footer>
+  Generated {DATE} with AI assistance under the <strong>osint</strong> skill (v4.1). AI assistance is not evidence; every factual claim above cites a source or is labeled as inference. This document contains personal data — store privately and do not redistribute.
+</footer>
+
+</body>
+</html>

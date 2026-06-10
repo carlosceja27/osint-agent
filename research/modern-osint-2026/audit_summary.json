@@ -1,0 +1,53 @@
+{
+  "base": "research/modern-osint-2026",
+  "files_written": [
+    "academic_research_bibliography.md",
+    "audit_summary.json",
+    "businesses_and_tools_landscape.md",
+    "government_public_guidance_bibliography.md",
+    "llm_update_packet.md",
+    "modern_osint_deep_report.md",
+    "modern_practices_matrix.md",
+    "osint_fundamentals_inventory.md",
+    "research_log.md",
+    "skill_update_recommendations.md",
+    "source_index.csv"
+  ],
+  "source_count": 50,
+  "word_counts": {
+    "skill_update_recommendations.md": 725,
+    "osint_fundamentals_inventory.md": 1436,
+    "modern_osint_deep_report.md": 2292,
+    "research_log.md": 390,
+    "government_public_guidance_bibliography.md": 1065,
+    "llm_update_packet.md": 529,
+    "modern_practices_matrix.md": 902,
+    "academic_research_bibliography.md": 731,
+    "businesses_and_tools_landscape.md": 928
+  },
+  "total_words": 8998,
+  "markdown_link_counts": {
+    "skill_update_recommendations.md": 0,
+    "osint_fundamentals_inventory.md": 46,
+    "modern_osint_deep_report.md": 46,
+    "research_log.md": 0,
+    "government_public_guidance_bibliography.md": 28,
+    "llm_update_packet.md": 0,
+    "modern_practices_matrix.md": 32,
+    "academic_research_bibliography.md": 21,
+    "businesses_and_tools_landscape.md": 36
+  },
+  "total_markdown_links": 209,
+  "url_status_counts": {
+    "browser_access_denied_or_bot_blocked; public landing page used": 1,
+    "curl_200": 28,
+    "curl_403_or_bot_blocked; public OHCHR landing page used": 2,
+    "curl_403": 15,
+    "curl_000": 1,
+    "curl_404": 1,
+    "curl_418": 1,
+    "curl_405": 1
+  },
+  "csv_rows": 50,
+  "note": "Final audit recomputed without additional network probes after shell safety blocked one curl command."
+}
