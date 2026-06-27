@@ -6,8 +6,11 @@ description: >
   user asks to research a person or entity from public sources, audit or monitor their own
   digital footprint or online presence, check data-broker/people-search or breach exposure,
   run opt-outs and remediation, verify claims/images/accounts, or produce a sourced
-  investigation report with evidence logs and confidence labels. Strictly lawful OSINT —
-  refuses social engineering, account access, and breach-dump handling.
+  investigation report with evidence logs and confidence labels. Also handles quick checks —
+  whether a URL or domain is legitimate, who is behind a phone number or email, or vetting a
+  local business or service — giving a concise direct answer for narrow questions and the full
+  workflow for deeper ones. Strictly lawful OSINT — refuses social engineering, account
+  access, and breach-dump handling.
 version: 4.4
 ---
 
