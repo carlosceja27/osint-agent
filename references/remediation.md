@@ -12,6 +12,16 @@ Use search engine tools to request deindexing of results containing personal con
 
 **Rule:** Removal from search ≠ removal from the web; remediate the source too.
 
+## Arrest & booking records / mugshot sites
+
+When a public arrest or booking record appears on a mugshot or booking-log aggregator (e.g., localcrimenews.com), start with the source site's own free removal/correction process where one exists.
+
+- **Arrest ≠ conviction.** Durable relief largely follows the criminal case outcome.
+- **Do not pay "removal" fees.** Several states (including California) restrict commercial pay-to-remove practices [verify current law]; paying often invites re-listing. Treat any paid-removal offer as a red flag.
+- If the source page is outdated or the case resolves favorably, also use search-engine removal/de-indexing tools to cut visibility — but removal from search ≠ removal from the source.
+- **The court order is the lever:** uncooperative aggregators often ignore standard requests but will act when sent the official **sealing (CA Penal Code §851.91, when there is no conviction)** or **expungement (§1203.4 — eligibility is limited and excludes some offenses, e.g., certain felony DUI-with-injury cases) [verify]** order. Obtain it via a criminal-defense / record-relief attorney, then submit it to the site's webmaster/legal contact.
+- This is general information, not legal advice.
+
 ## Data broker and people-search opt-outs
 
 Opt-out pages move frequently, so this table gives stable navigation paths instead of direct links: start from the broker's own privacy/opt-out page, or search the quoted query. Both notes apply broadly — most brokers require email confirmation, and most listings can reappear.
@@ -60,6 +70,36 @@ Review and adjust settings across platforms to minimize exposure:
 *   **Integrations:** Review third-party app access and revoke unnecessary permissions.
 *   **Location:** Disable location history tracking on personal accounts.
 *   **Code/Domain:** Remove exposed personal emails from public commits where feasible; rotate accidentally published secrets; enable WHOIS privacy protection on personal domains.
+
+## Platform exposure self-audit (what your public profile reveals)
+
+The goal is to see your own profile exactly as a stranger sees it — not to guess, but to confirm. Use a logged-out incognito browser window or the platform's built-in "View as public / visitor" feature to inventory what leaks. Use only native platform tools — never third-party scrapers, credential-sharing, or another person's account. Audit only your own presence or that of a consenting, documented subject.
+
+### General logged-out audit procedure
+
+1. Open an incognito / private browser window (or a second browser with no active session).
+2. Navigate directly to your profile URL.
+3. If the platform offers a native "View as public" / "View as visitor" mode (see table), use it — it reflects current rendering logic more accurately than a cold incognito hit.
+4. Inventory every field visible without logging in: full name (does a maiden/middle name appear?); profile photo (identifiable? reverse-image-searchable?); location/hometown; employer/school; contact info (email, phone, WhatsApp link, website); followers/following/connections visibility (can a stranger enumerate your network?); tagged content others posted; post-history reach; "about"/bio fields (birthday, relationship status, views); and photo metadata (GPS/device/timestamp — check separately with `exiftool` or an EXIF viewer, since platforms strip inconsistently).
+
+### Per-platform exposure defaults
+
+| Platform | What's public by default | Native privacy / checkup tool | Key things to lock down |
+|---|---|---|---|
+| Instagram | Username, bio, follower/following counts, post grid; professional/business accounts **expose email and phone** via the Contact button | Settings → Privacy → Account Privacy (toggle Private); logged-out incognito shows the public state | Switch to personal account to remove the Contact button; remove phone/email; restrict tagged-photo review |
+| Facebook | Name, profile/cover photo, and often friends list, tagged photos, and check-ins (audience varies by account age/setup) | Settings → Privacy → Privacy Checkup; Profile → ⋯ → View As (shows public view) | Lock friends list to "Only me"; audit "Photos of You"; set past-posts audience to Friends; hide birthday year |
+| X / Twitter | All posts, likes, following/followers, replies, and media are **public by default** unless protected | Settings → Privacy and Safety → Audience and Tagging; incognito view is accurate | Enable protected posts if warranted; remove phone/email from discoverability; check location-on-posts setting |
+| LinkedIn | Public profile (name, headline, photo, current role, education, skills, often past roles) is **search-engine indexed by default** | Settings → Visibility → Edit your public profile (exact search-engine preview) | Limit public profile to name + headline; turn off "Viewers also viewed"; manage activity broadcasts |
+| TikTok | Accounts are **public by default for users 16+** — videos, likes (if enabled), following/followers | Profile → ⋯ → Privacy (toggle Private); Settings → Privacy → Discoverability | Set to Private; hide liked videos; disable "Suggest your account"; remove phone/email from discoverability |
+| YouTube | Channel name, subscriber count, public videos, public playlists, and About page (incl. linked socials) | YouTube Studio → Settings → Channel; incognito on your channel URL | Remove linked socials from About; set non-public playlists to Unlisted; audit location tags on older uploads |
+| Reddit | Username, post/comment history, public upvoted/saved content, active communities | Settings → Privacy → Manage privacy; incognito profile URL shows public state | Hide active communities; disable "Allow people to follow you"; audit old comments for PII |
+| Snapchat | Profile is private by default, but **Snap Map** can expose location; public Stories and Spotlight submissions are public | Profile → ⚙ → See My Location → Ghost Mode; Who Can… → View My Story / Contact Me / See My Location | Enable Ghost Mode; set Story visibility to Friends; audit linked phone contacts |
+
+### What aggregators do with this
+
+Each field above looks trivial in isolation. Combined, they form a mosaic: full name + employer + neighborhood + photo is enough for most data brokers to build and sell a dossier, and enough for a motivated bad actor to launch a social-engineering or doxxing campaign. This is the exact mechanism exploited when public-profile data is harvested at scale — which is why minimizing each field matters. After this audit, run the data-broker opt-outs (above) to claw back what's already aggregated, then apply the Platform privacy hardening steps (above) to reduce future exposure.
+
+Log findings — fields exposed, platforms audited, changes made, and any opt-outs submitted — in the remediation tracker below.
 
 ## Remediation tracker template
 

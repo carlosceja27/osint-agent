@@ -8,7 +8,7 @@ description: >
   run opt-outs and remediation, verify claims/images/accounts, or produce a sourced
   investigation report with evidence logs and confidence labels. Strictly lawful OSINT —
   refuses social engineering, account access, and breach-dump handling.
-version: 4.1
+version: 4.4
 ---
 
 # OSINT Audit, Monitoring, and Public-Interest Investigation
@@ -43,6 +43,7 @@ Do not proceed if the request requires any of the following. If an adjacent requ
 - **Open ≠ true:** public data can be wrong, manipulated, stale, synthetic, or context-stripped.
 - **Public ≠ fair game:** aggregating public fragments can create privacy harm (mosaic effect). Collect and report only what the approved purpose needs.
 - **Primary beats aggregator:** official/original sources outrank people-search sites, reposts, screenshots, snippets, and tool outputs. Aggregators are leads, never facts.
+- **Negative-confidence gate:** never state "no criminal records" (or similar) unless the arrest-aggregator / booking-log sweep and the county criminal index were actually run, or each is explicitly logged as not-run. A clean search-engine result is **not** a clean record — California and many states have no public name-based criminal-history search. Otherwise label the result "not verified."
 - **Source ≠ content:** grade the source and the claim separately.
 - **Reproducibility:** log enough (query, URL, date, match criteria) that another analyst could retrace the finding.
 - **Intelligence cycle:** plan/direct → collect → process → analyze/produce → disseminate/feedback, iteratively.
@@ -118,6 +119,10 @@ Read `references/modules.md` for the full library — sources, example queries, 
 | M | International and cross-border records |
 | N | Mis/disinformation and claim verification |
 | O | Username, alias, and avatar enumeration (core to self-audits) |
+| P | Cryptocurrency and blockchain OSINT (public-ledger; address ≠ identity) |
+| Q | Transport and asset tracking (public ADS-B/AIS; assets/entities only, not individuals) |
+
+For the full per-category source menu — with access type, automation-safety, source tier, and OPSEC-risk tags — read `references/source-directory.md`; each module maps to a section there.
 
 For every finding capture: source, tier, URL, archive URL, access date, exact query/path, what it shows, identity-match criteria, confidence, relevance, sensitivity/redactions.
 
@@ -141,6 +146,8 @@ Match output to the request — narrow question gets the concise-answer template
 
 Report files contain personal data: save them only to a user-confirmed private location (default `~/osint-monitoring/{subject-slug}/reports/`), never into the skill directory, and tell the user the exact path written. Archive volatile high-value findings (e.g., a broker listing or third-party page exposing contact data) before reporting, since they may change or disappear.
 
+**Late-finding sync:** if a new finding arrives after the report, evidence log, or tracker is drafted, update all three together, bump the report date/timestamp, regenerate every export (HTML, PDF), and re-run the pre-delivery checklist before delivery — a partial update that leaves a stale export is worse than no update.
+
 ### Phase 6 — Remediation and monitoring
 
 For self-audit remediation (broker opt-outs incl. California DROP, search-engine removal, breach/credential hygiene, platform hardening, tracker template): read `references/remediation.md`. For recurring presence monitoring (standing scope, baseline, run-over-run diffing, alert thresholds, cadence): read `references/monitoring.md`. For journalism monitoring: docket/registry/filing alerts and archiving as the story develops.
@@ -154,6 +161,7 @@ Read `references/legal-ethics.md` before collection when: the subject or data cr
 | File | Read when |
 |---|---|
 | `references/modules.md` | Selecting or executing any collection module |
+| `references/source-directory.md` | Choosing sources for a module — vetted, tiered, attribute-tagged source menu by category |
 | `references/templates.md` | Producing intake, plan, evidence log, or any report |
 | `references/report-template.html` | User chose HTML output (suggest it first) — fill placeholders, keep self-contained |
 | `references/monitoring.md` | Monitoring mode (mode 3), baselines, recurring runs |

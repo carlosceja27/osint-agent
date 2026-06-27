@@ -68,6 +68,7 @@ Goal: find press coverage, interviews, press releases, podcasts, public appearan
 
 Sources/tools:
 - Google News, publisher archives, local outlets, PR Newswire, Business Wire, GlobeNewswire, Listen Notes, event pages, transcripts where available.
+- Arrest / booking coverage: arrest-aggregator and booking-log sites are often poorly indexed by general search engines, so a clean Google/Bing result is **not** a clean record. Search each site's **own internal search directly** (interactive/manual only) — do **not** rely on `site:` operators, which miss these poorly-indexed or anti-bot domains: `localcrimenews.com`, `mugshots.com`, `arrests.org`, `jailbase.com`, `recentlybooked.com`, `bustednewspaper`, plus county sheriff booking/arrest logs and the county Superior Court criminal case index. Arrest ≠ conviction.
 
 Verification controls:
 - Prefer original publisher pages and full transcripts over snippets.
@@ -82,6 +83,8 @@ Goal: verify records from primary official sources whenever possible.
 
 Submodules:
 - Courts: PACER, CourtListener, RECAP, state/county portals, official dockets.
+- Criminal / booking records: county sheriff booking/arrest logs, county Superior Court criminal case index, NSOPW, and arrest-aggregator / mugshot sites (`localcrimenews.com`, `mugshots.com`, `arrests.org`, `jailbase.com`, `recentlybooked.com`, `bustednewspaper`) — interactive/manual searches only, on each site directly (they are poorly indexed by general search engines). In California and many states there is no public name-based criminal-history search, so treat this set as the check; never infer a clean record from a clean web search.
+- Sanctioned API lane: CourtListener REST API (`https://www.courtlistener.com/api/rest/v4/search/`, types `r`=RECAP and `o`=opinions) for federal records — a lawful, scriptable source (unlike the gated portals below).
 - Corporate: SEC EDGAR, state Secretary of State, UK Companies House, Canada Business Registries, Australian Business Register / ASIC routes, New Zealand Companies Register, OpenCorporates as a lead, and GLEIF LEI lookup for legal-entity identifiers.
 - Property: county assessor/recorder/tax portals where lawful and relevant.
 - Licenses: state/provincial/national licensing boards, bars, medical boards, contractor boards, FAA/FCC equivalents where relevant.
@@ -95,6 +98,7 @@ Verification controls:
 - Do not equate arrest with conviction, filing with finding, allegation with fact, or active entity with lawful conduct.
 - Use aggregators only to locate primary records.
 - For common names, require additional identifiers before attributing.
+- Before any automation, check robots.txt and terms; never script or scrape CAPTCHA-protected, anti-bot, or disclaimer-gated portals (NSOPW, CA Megan's Law, county Odyssey court portals) — these are interactive/manual only. (Extends Module F's anti-bot-evasion prohibition.)
 
 Evidence to capture: jurisdiction, registry name, case/filing/license number, date, status, parties/disposition, entity identifiers (e.g., LEI), cross-references, attribution caveats, and access date.
 
@@ -154,21 +158,41 @@ Evidence to capture: location clues, matched landmarks/terrain/signage/weather/s
 
 ### Module I — Domains, web infrastructure, and cyber OSINT
 
-Goal: public-source discovery of domains, subdomains, technology, exposure, and historical web infrastructure for defensive or investigative context.
+Goal: public-source, passive discovery of domains, subdomains, technology, exposure, and historical web infrastructure for defensive or investigative context. Also supports self-audit — an individual or organization assessing their own publicly visible footprint.
 
-Allowed sources/tools:
-- WHOIS/RDAP, ICANN Lookup, DNS records, SecurityTrails/ViewDNS, crt.sh certificate transparency, BuiltWith/Wappalyzer, Wayback Machine, Shodan/Censys public search, URLScan.io, DNSdumpster, public advisories and threat reports.
+Passive footprint sweep — run sources in this order (registration → certificate transparency → passive DNS/subdomains → historical/archive → technology fingerprint → public host/service search). This is the lawful, passive alternative to a tool like theHarvester:
+
+1. **Registration:** WHOIS/RDAP (ICANN Lookup, ARIN RDAP), registrar public records.
+2. **Certificate transparency:** crt.sh, CertSpotter, Censys CT search — enumerate subdomains and issued certificates without touching the target.
+3. **Passive DNS & subdomains:** SecurityTrails, ViewDNS, DNSDumpster, RapidDNS, Netlas — historical DNS resolution and subdomain enumeration from passive data only.
+4. **Historical/archive:** Wayback Machine (CDX API), CommonCrawl — crawl history, exposed paths, and archived versions.
+5. **Technology fingerprint:** BuiltWith, Wappalyzer, Netcraft — stack and hosting data derived from passive crawls.
+6. **Public host/service search:** Shodan (public search), Censys public host search, URLScan.io — already-indexed scan data; do not initiate new scans against live targets.
+7. **Passive aggregation CLIs:** theHarvester or Subfinder in passive mode only (API-backed, no active DNS brute-force).
+
+See `source-directory.md` (Section I) for the full source menu with access notes and limitations.
+
+Self-audit use: when auditing your own domain or organization, run the same passive sweep to surface what is publicly discoverable — exposed subdomains, email addresses in CT logs or public commits, and outdated or misconfigured infrastructure. Cross-reference `remediation.md` for hardening guidance on findings.
+
+Example queries:
+- crt.sh subdomain enumeration: `https://crt.sh/?q=%25.example.com&output=json`
+- Wayback CDX API: `https://web.archive.org/cdx/search/cdx?url=*.example.com/*&output=json&fl=original,timestamp&limit=500`
+- Reverse-IP (ViewDNS): `https://viewdns.info/reverseip/?host=203.0.113.10`
+- Shodan org search: `org:"Example Corp" port:443`
+- URLScan.io domain history: `https://urlscan.io/search/#domain:example.com`
 
 Boundaries:
 - Discovery and defensive assessment only.
 - No exploitation, brute forcing, credential attempts, bypass, intrusive scanning, or instructions enabling unauthorized access.
+- Passive only — exclude active scanning (port scans, live crawls, DNS brute-force) and breach/credential databases.
 
 Verification controls:
-- Log query, timestamp, source, and whether the result is current or historical.
-- Confirm important findings across multiple public sources.
-- Avoid exposing sensitive infrastructure details unless needed and responsible.
+- Log each query: tool used, query string, timestamp, and whether the result is current or historical.
+- Confirm material findings across at least two independent passive sources before treating as established.
+- Flag data age — passive DNS and CT logs may reflect superseded configurations.
+- Avoid surfacing or retaining sensitive infrastructure details beyond what the investigation requires.
 
-Evidence to capture: domain/subdomain, WHOIS/RDAP record, DNS records, technology stack, certificate transparency logs, infrastructure exposure notes, current vs historical status, cross-verified sources, and access date.
+Evidence to capture: domain/subdomain list, WHOIS/RDAP record with registrar and dates, DNS records (A, MX, NS, TXT), certificate transparency entries, technology stack and hosting provider, Wayback/CommonCrawl archive notes, indexed host/service data from Shodan or Censys, current vs historical status, cross-verified sources, and access date per query.
 
 ### Module J — Breach exposure and credential-risk checks
 
@@ -230,20 +254,38 @@ Evidence to capture: registry/jurisdiction name, record URL, access date, name v
 
 ### Module N — Misinformation, disinformation, and claim verification
 
-Goal: evaluate public claims, narratives, manipulated content, and information disorder.
+Goal: evaluate public claims, narratives, manipulated content, and information disorder using traceable, source-anchored methods.
 
 Terminology:
 - Misinformation: false or misleading information shared without proven intent to deceive.
 - Disinformation: false or misleading information shared with intent to deceive or manipulate.
 - Malinformation: genuine information used out of context to harm.
 
+Sources/tools:
+- Fact-check organizations: Snopes, PolitiFact, FactCheck.org, AFP/Reuters/AP Fact Check, Full Fact — corroborating signals, not primary verdicts; always trace back to the original source they cite.
+- Fact-check meta-search: Google Fact Check Explorer, IFCN signatory directory — cross-check whether a claim has been assessed by multiple independent outlets.
+- Claim-spread visualization: Hoaxy — maps amplification patterns across platforms.
+- Outlet-bias context: Media Bias/Fact Check — opinionated aggregator; one contextual signal only, not an authoritative rating.
+- Methodology references: Verification Handbook (EJC), First Draft verification guide.
+- Cross-reference Module G for image/video verification (reverse search, metadata, provenance). See `source-directory.md` (Sections D/N) for the extended menu.
+
+Primary and original sourcing outranks any fact-checker's summary. Fact-checkers are a starting pointer, not a conclusion.
+
+Reverse-chronology claim-tracing workflow:
+1. **Capture and archive** the claim and known variants — screenshot, archive.today link, and Wayback snapshot. Record platform, claimant, and timestamp at discovery.
+2. **Reverse-trace spread** using Hoaxy, archive searches, and platform search sorted by date — identify the earliest datable instance and how the claim mutated across versions.
+3. **Locate the original source** via reverse image/video search (TinEye, Google Lens, InVID/WeVerify), embedded metadata, and news/academic archive searches — establish whether it originated from a document, broadcast, event, or secondary repackaging.
+4. **Verify the originating actor and accuracy** — assess whether the claim is accurate, altered, mistranslated, or stripped of context; note any changes between origin and the version under review.
+5. **Corroborate against primary sources** (official records, original reporting, authoritative databases). If corroboration is unavailable or contradictory, mark the claim unverified or disputed with explicit reasoning.
+
 Verification controls:
-- Trace the claim to its earliest available source.
+- Trace the claim to its earliest available source before consulting fact-checkers.
 - Capture the claim, claimant, timestamp, platform, and spread pattern.
 - Check independent coverage and original context.
-- Avoid labeling intent unless evidence supports it.
+- Note the earliest-source determination and which fact-checker(s), if any, were consulted — including whether their verdicts agree.
+- Avoid labeling intent (misinformation vs disinformation) unless evidence directly supports it.
 
-Evidence to capture: claim text, claimant, timestamp, platform, earliest source URL, spread pattern, independent coverage links, original context notes, intent assessment (if supported), confidence level, and access date.
+Evidence to capture: claim text and known variants, claimant, timestamp and platform of discovery, earliest-source URL and archive link, spread pattern, independent coverage links, original context notes, earliest-source determination method, fact-checker(s) consulted and verdict consistency, intent assessment (only if evidenced), confidence level, and access date.
 
 ### Module O — Username, alias, and avatar enumeration
 
@@ -265,3 +307,67 @@ Verification controls:
 Stop condition: when candidate platforms are exhausted or matches cannot be raised above "possible".
 
 Evidence to capture: username/handle searched, platform URLs, match signals (bio/links/photo/history), attribution status ("confirmed" vs "possible"), consent/self-audit notation, and access date.
+
+### Module P — Cryptocurrency and blockchain (public-ledger) OSINT
+
+Goal: trace public on-chain activity — wallets, transactions, and token flows — tied to a defined requirement such as journalism on fraud, scams, or sanctions evasion, or self-audit of one's own published wallet addresses.
+
+Allowed sources/tools:
+- Block explorers by chain: Blockstream.info (BTC), Etherscan / BscScan / PolygonScan / Solscan / Tronscan (respective chains), Blockchair (multi-chain).
+- Sanctions and abuse databases: OFAC SDN crypto-address entries, OpenSanctions, Chainabuse, Bitcoin-Abuse-class databases.
+- Wallet clustering and attribution tools: WalletExplorer; Arkham / Breadcrumbs or similar paid platforms — treat all labels as leads, not conclusions.
+- See `source-directory.md` (Section P) for the full menu.
+
+Example queries:
+- Look up an address's full transaction history on the relevant block explorer.
+- Check an address against the OFAC SDN list or OpenSanctions.
+- Trace a transaction hash to sender, receiver, value, and timestamp.
+- Map token transfers across hops to identify consolidation or dispersion patterns.
+
+Boundaries:
+- Public-ledger data and lawful tools only.
+- Never acquire or use stolen private keys, hacked exchange data, or de-anonymization-for-hire services targeting individuals.
+- Do not attempt to pierce privacy coins or mixer outputs through non-public means.
+
+Verification controls:
+- A blockchain address is not an identity. Clustering heuristics and exchange/entity labels are investigative leads only — not proof of ownership or wrongdoing.
+- Mixers, privacy coins (e.g. Monero, shielded pools), and cross-chain bridges break or obscure tracing; note the gap explicitly rather than inferring through it.
+- Confirm any entity attribution with at least one independent, non-blockchain corroborating source before naming a person or organization.
+- Log each query: address or hash queried, chain, explorer used, date of query, and whether a label/attribution came from the tool or from independent corroboration.
+
+Stop when the trail enters a custodial exchange, a mixer, or a privacy-coin conversion beyond public-ledger visibility, or when entity attribution cannot be raised above "possible" with available public evidence.
+
+Evidence to capture: wallet address(es), chain and network, transaction hash(es), timestamps, value and token type, explorer URL and query date, any exchange/entity labels with their source, OFAC/OpenSanctions hit details if applicable, and corroborating sources used for any attribution.
+
+### Module Q — Transport and asset tracking (public broadcast data)
+
+Goal: track corporate or private aircraft, commercial fleets, and maritime vessels using public ADS-B and AIS broadcast data, for public-interest journalism (e.g., sanctions evasion, illicit shipping, undisclosed corporate travel) or auditing one's own registered asset.
+
+Allowed sources/tools:
+- Aircraft (ADS-B): FlightAware, Flightradar24 (respects FAA privacy-blocking requests), OpenSky Network (research and non-commercial use only).
+- Aircraft (unfiltered): ADS-B Exchange ignores FAA and equivalent privacy-blocking requests — use deliberately and only where a public-interest justification is documented.
+- Vessels (AIS): MarineTraffic, VesselFinder, AISHub.
+- Registration and ownership reference: FAA aircraft registry (N-number lookup), ICAO 24-bit hex decoders, Equasis (vessel ownership, operator, port-state control detention history), IMO/MMSI registries.
+- See `source-directory.md` (Section Q) for the full menu.
+
+Example queries:
+- Look up a tail number or N-number to identify registered owner and aircraft type.
+- Resolve an ICAO 24-bit hex to a specific aircraft registration.
+- Check a vessel's IMO or MMSI for port-call history, flag state, and operator.
+- Cross-reference a registered owner name against corporate registry or sanctions lists.
+
+Boundaries:
+- Asset and entity tracking for a documented, legitimate public-interest requirement only.
+- Never use this module to build a real-time pattern-of-life on a private individual, track movements to or from a residence, or produce output that could enable stalking or harassment — that is out of scope and may be unlawful.
+- Do not chain live position data to a home address or personal schedule to locate a specific person.
+- Confirm applicable local law before tracking private aircraft in jurisdictions that legally restrict such activity.
+
+Verification controls:
+- ADS-B and AIS positions can be spoofed, deliberately delayed, or gap-filled with interpolations — corroborate significant position claims across at least two sources.
+- Registration records reflect the legal registrant, not necessarily the beneficial owner; shell companies, trusts, and management companies are common — pursue ownership chains through corporate registries.
+- A flight or voyage record establishes asset movement, not who was aboard; do not assert passenger identity without independent evidence.
+- Log each query: identifier queried (tail/N-number, ICAO hex, IMO, MMSI), source platform, query date, and any caveats on data freshness or filtering status.
+
+Stop when the asset or entity question is answered to the required evidential standard, or when continuing would shift the focus from asset tracking toward surveillance of an individual's personal movements.
+
+Evidence to capture: aircraft tail/N-number or vessel IMO/MMSI, ICAO hex (aircraft), registered owner and operator, flag state (vessels), flight or voyage records with timestamps and positions, source platform and query date, ownership-chain sources, and any corroborating corporate or sanctions-list references.

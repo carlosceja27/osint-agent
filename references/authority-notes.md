@@ -73,6 +73,26 @@ These notes summarize the research base used to update `skill.md` and `WEB_CHAT_
    - if the model cannot browse, it must say so and run offline planning mode;
    - output is proportional: concise answers for narrow questions, full reports for deep work.
 
+## v4.4 — external-resource review, source directory, and new modules
+
+A depth pass reviewed five public OSINT resources and folded in only what fits the lawful, source-tiered design (see CHANGELOG v4.4). Design choices:
+
+- **Compiled an original source directory** (`references/source-directory.md`) rather than mirroring any external list — kept it to durable, high-value sources to resist link rot, and tagged every entry with an attribute legend (access · automation-safety · tier · OPSEC risk).
+- **Adopted the OSINT-Framework attribute model** (function-first, with access/automation/tier metadata) as the directory's organizing convention.
+- **Adopted theHarvester's passive-source taxonomy** to deepen Module I as a passive footprint sweep — passive lookups only; active scanning and breach/credential databases stayed excluded.
+- **Rejected Osintgram wholesale** (credential-based scraping, ToS violation, contact-harvesting → stalking risk). Only its self-audit concept survived, reframed in `remediation.md` as "view your own profile as the public sees it" using native tools.
+- **Added crypto/blockchain (Module P) and transport/asset tracking (Module Q)** as genuine coverage gaps, each guardrailed: crypto with "address ≠ identity / leads not proof," transport scoped to assets/entities with explicit anti-stalking boundaries so every enabled use stays lawful.
+- **Excluded by policy, on review:** facial-recognition identity engines (PimEyes/Clearview-class — biometric/EU-AI-Act/stalking risk), breach-dump/password-lookup services, and any credential-based or ToS-evading scraper.
+
+### Source licensing and credits
+
+The directory is original curation; facts (which sources exist, their URLs, what they do) are not copyrightable and no descriptive prose was copied. Attribution for works that informed it:
+
+- **jivoi/awesome-osint** — CC-BY-SA 4.0 (taxonomy breadth; attribute if any wording is later found to derive from it).
+- **lockfale/OSINT-Framework** — MIT (attribute-tagging model).
+- **sinwindie/OSINT** — restrictive license; taxonomy ideas only, no text reuse, no redistribution.
+- **laramies/theHarvester** — GPLv2 (passive-source taxonomy reference; no code used).
+
 ## Future editing rules
 
 - Do not add HUMINT/social-engineering workflows.

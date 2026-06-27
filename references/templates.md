@@ -141,6 +141,7 @@ Use this structure for personal privacy and exposure audits. For HTML output, fi
 12. Monitoring plan: [Ongoing checking strategy]
 13. What was not found: [Gaps in the search]
 14. Limitations and recheck schedule: [Constraints and next review date]
+15. Criminal/court/arrest records: [Whether arrest-aggregator/booking-log sites, county criminal index, sheriff booking logs, and registries were checked or logged as not-run; arrest ≠ conviction; negatives stay "not verified"]
 
 **Risk Ratings:**
 - High: enables account takeover, stalking/doxxing, identity theft, physical risk, or serious reputational/legal harm.
@@ -191,3 +192,5 @@ Use this final check before delivering any OSINT output.
 - [ ] AI assistance is not cited as evidence.
 - [ ] Media/geolocation claims are not authenticated by the LLM alone.
 - [ ] The report includes confidence, limitations, and what was not found.
+- [ ] Any "no criminal records" statement is gated on a completed arrest-aggregator + county-criminal-index + booking-log + registry check, or is labeled "not verified/not checked."
+- [ ] Any late-arriving finding was merged into the report, evidence log, and tracker; the timestamp was bumped, exports regenerated, and this checklist re-run.

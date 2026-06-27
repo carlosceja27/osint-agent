@@ -153,6 +153,17 @@ a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius
   <div class="sh"><span class="sn">04</span><h2>Findings by Category</h2></div>
   <!-- repeat this card per category (identity/contact, social profiles, professional/code,
        news/media, public records, data brokers, breach exposure, username enumeration) -->
+  <!-- Criminal / Court & Arrest records — keep first when criminal coverage is in scope; it is often the top concern. Delete if out of scope. -->
+  <div class="card">
+    <h3 style="margin-bottom:16px">Criminal, Court &amp; Arrest Records <span style="color:var(--muted);font-weight:400;font-size:12px">(Modules E / D)</span></h3>
+    <div class="co cw"><span class="ci">&#10071;</span><div><strong>Arrest does not equal conviction.</strong> A negative here is <em>not verified</em> unless the arrest-aggregator / booking-log sweep, county Superior Court criminal index, sheriff booking logs, and relevant registries (NSOPW / state) were checked or explicitly logged as not run.</div></div>
+    <!-- repeat .f per finding; charges at arrest are allegations, not findings -->
+    <div class="f">
+      <div class="ft">{F-00X} · {Arrest / booking / court finding} <span class="risk M">Medium</span><span class="conf">{Confirmed | Likely | Possible | Disputed}</span></div>
+      <div class="fm">Source: <a href="{URL}">{source name}</a> ({tier}) · Accessed {date} · Query: <code>{query/path}</code> · Archive: {archive URL or "not archived"}</div>
+      <div class="fd">{What it shows; the exact arrest/charge/booking + disposition status; identity-match reasoning; sealing/expungement note; why it matters.}</div>
+    </div>
+  </div>
   <div class="card">
     <h3 style="margin-bottom:16px">{Category} <span style="color:var(--muted);font-weight:400;font-size:12px">(Module {X})</span></h3>
     <!-- repeat .f per finding -->

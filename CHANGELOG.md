@@ -1,5 +1,29 @@
 # OSINT Skill Changelog
 
+## v4.4 — 2026-06-23
+
+Depth pass that reviewed five public OSINT resources — jivoi/awesome-osint (CC-BY-SA 4.0), lockfale/OSINT-Framework (MIT), sinwindie/OSINT, laramies/theHarvester (GPLv2), and Datalux/Osintgram (GPLv3) — and folded in only what fits the skill's lawful, source-tiered, verification-gated design. Orchestrated by Claude (Opus): Haiku subagents fan-out-compiled candidate source lists per category; Sonnet subagents applied the ethics/legal filter and drafted the prose in-voice; Opus integrated and ran the final boundary gate. Osintgram was rejected as a tool (credential-based Instagram scraping, ToS-violating, contact-harvesting → stalking-adjacent); only its self-audit concept was salvaged and reframed.
+
+- **New `references/source-directory.md`:** vetted, tiered, ethics-filtered source menu by category, each section mapped to a module. Adopts an attribute legend (access type · automation-safety · source tier · OPSEC risk) inspired by OSINT-Framework. Includes a Google-dork / advanced-operator quick-reference. Curated for durable high-value sources, not a link dump. Excludes facial-recognition identity engines (PimEyes/Clearview-class), breach-dump/password lookups, and credential scrapers.
+- **Module I deepened:** consolidated passive domain/email footprint sweep (registration → CT → passive DNS → archive → tech fingerprint → public host search), the lawful passive alternative to theHarvester; expanded certificate-transparency and passive-DNS sources; added a self-audit-your-own-domain framing. Active scanning and breach/credential databases remain excluded.
+- **Module N deepened:** added concrete fact-check sources (Snopes, PolitiFact, AFP/Reuters/AP, Full Fact, IFCN directory, Google Fact Check Explorer, Hoaxy) and a five-step reverse-chronology claim-tracing workflow. Primary sourcing still outranks any fact-checker summary.
+- **New Module P — Cryptocurrency & blockchain (public-ledger) OSINT:** public explorers, OFAC/OpenSanctions address checks, abuse databases, clustering tools — with hard caveats (address ≠ identity; clustering/labels are leads not proof; public-ledger + lawful tools only; no stolen keys/de-anon-for-hire).
+- **New Module Q — Transport & asset tracking (public ADS-B/AIS):** flight and vessel tracking scoped to assets/entities for public-interest work, with explicit anti-stalking boundaries (no real-time pattern-of-life on individuals; no chaining live position to a home/registry; respect jurisdictions that restrict private-aircraft tracking). ADS-B Exchange listed with an unfiltered-data caveat.
+- **Remediation:** new "Platform exposure self-audit" section — view your own profile as the public sees it (logged-out / native "view as" tools) with a per-platform exposure-defaults table. The ethical reframe of Osintgram's only salvageable idea.
+- **SKILL.md:** module table extended to P/Q; `source-directory.md` added to the reference dispatch table and Phase-3 routing.
+
+## v4.3 — 2026-06-13
+
+Criminal-record hardening after a live consent-based self-audit missed an arrest booking record (on a poorly-indexed arrest-aggregator) and stated an over-confident "no records" negative. Drafted with ChatGPT 5.5 (via codex), independently reviewed by Gemini Pro (via agy) — which caught a false-negative flaw (relying on search-engine `site:` operators for sites that block crawlers) — orchestrated and QA'd by Claude.
+
+- **Collection:** new arrest-aggregator / booking-log sweep (localcrimenews, mugshots, arrests.org, jailbase, recentlybooked, county sheriff booking logs, county criminal index) — searched on each site directly, interactive/manual only, because general search engines miss them.
+- **Controls:** codified the CourtListener REST API as the sanctioned federal lane, plus a mandatory robots.txt/ToS-diligence rule — never script CAPTCHA / anti-bot / disclaimer-gated portals (NSOPW, Megan's Law, county Odyssey).
+- **Negative-confidence gate:** never claim "no criminal records" unless the aggregator sweep + county criminal index were run or logged as not-run; a clean web search is not a clean record (no public name-based criminal search in CA and many states).
+- **Reporting:** dedicated "Criminal, Court & Arrest Records" report block with a baked-in arrest ≠ conviction callout.
+- **Remediation:** arrest / mugshot-site removal guidance — never pay; relief tracks the case outcome; submit the sealing (§851.91) / expungement (§1203.4) order to force removal.
+- **Workflow:** late-finding re-sync across report, evidence log, tracker, and regenerated exports (the prior run shipped a stale PDF).
+- Frontmatter version corrected (was 4.1; 4.2 was the template design pass) → 4.3.
+
 ## v4.2 — 2026-06-09
 
 Design-system pass on `references/report-template.html`, applying the interface-design skill. Audited by Gemini 3.1 Pro (via agy), implemented by qwen3-coder-next (local), QA'd and finished by Claude. Score went 5/10 → 7/10 → all critical findings resolved.
